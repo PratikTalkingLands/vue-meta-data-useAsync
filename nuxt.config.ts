@@ -1,6 +1,6 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  //...
   app: {
     head: {
       title: 'Talking Lands',
@@ -14,11 +14,30 @@ export default defineNuxtConfig({
       //   { hid: 'og-title', property: 'og:title', content: 'Talking Lands'},
       //   { hid: 'og-type', property: 'og:type', content: 'website' },
       //   { hid: 'twitter-card', property: 'twitter:card', content: '' },
-      //   { hid: 'og-image', property: 'og:image', content: 'https://dev.talkinglands.in/public/store/organizations/01GPWQAET9ENJ489BQDCPNYYSB/projects/01GQF1WGY719VNNFHA9EJBJRJ9/photos/tBZjtDf8HacFfUcJEQaRwJ.png'},
+      //   { hid: 'og-image', property: 'og:image', content: 'https://new.talkinglands.com/static-assests/images/TLlogo_Dark.svg'},
       //   { hid: 'og-description', property: 'og:description', content: 'Talkinglands is an AI driven real estate platform which enables buyers to discover and own properties through hyper-personalized recommendations. Talkinglands uses deep machine learning to understand buyer behavior and expectations to provide insight-driven, curated experience for owning their dream properties effortlessly.'},
       //   { name: 'format-detection', content: 'telephone=no' }
       // ],
     },
     // pageTransition: { name: 'page', mode: 'out-in' },
+  },
+  build: {
+    transpile: ['vuetify'],
+  },
+  modules: [
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
+    //...
+  ],
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
   },
 })

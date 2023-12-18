@@ -1,12 +1,3 @@
 <template>
-    <button @click="routePush">Share News</button>
+    <h1>Hello</h1>
 </template>
-
-<script setup>
-const router = useRouter()
-const slug = "any-slug-you-want"
-
-const routePush = () => {
-    router.push(`/share/${slug}`)
-}
-</script>
