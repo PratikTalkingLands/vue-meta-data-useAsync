@@ -1,64 +1,55 @@
 <template>
-    <div>
-      <h1>{{ responseData.title }}</h1>
-      <p>{{ responseData.description }}</p>
-      <img :src="responseData.image" alt="News Image" />
+    <!-- <Head>
+      <Title>{{ title }}</Title>
+      <Meta name="description" content="title" />
+      <Meta name="og:title" :content="title" />
+      <Meta name="og:image" :content="title" />
+      <Meta name="og:description" :content="title" />
+    </Head> -->
+    <div style="height: 700px; width: 500px; display: flex; flex-direction: column;">
+      <img v-if="posts" :src="posts.image" />
+      <h3 v-if="posts">{{ posts.title }}</h3>
+      <p v-if="posts">{{ posts.description }}</p>
+      <button @click="showAlert" :disabled="!posts">Show Alert</button>
     </div>
   </template>
   
   <script setup>
-  import { ref, onMounted, onUpdated } from 'vue';
+  import { ref, computed } from 'vue';
+  import axios from 'axios';
+  import { useHead } from '@vueuse/head';
   
-  // Define a reactive variable to store API response
-  const responseData = ref({});
+  const posts = ref(null);
   
-  // Fetch data from the API
-  const fetchData = async () => {
-    try {
-      const response = await fetch('https://api.npoint.io/6b9b6f798092807d5a8d');
-      const data = await response.json();
-      responseData.value = data;
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'https://api.npoint.io/6b9b6f798092807d5a8d',
+    headers: {},
+  };
   
-      // Update meta tags dynamically
-      updateMetaTags();
-    } catch (error) {
-      console.error('Error fetching data:', error);
+  axios(config)
+    .then((res) => {
+      posts.value = res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  
+  const showAlert = () => {
+    if (posts.value) {
+      alert(JSON.stringify(posts.value));
     }
   };
   
-  // Call the fetchData function when the component is mounted
-  onMounted(() => {
-    fetchData();
-  });
-  
-  // Call the fetchData function when the component is updated
-  onUpdated(() => {
-    updateMetaTags();
-  });
-  
-  // Function to update dynamic meta tags
-  const updateMetaTags = () => {
-    const { title, description, image } = responseData.value;
-  
-    // Update meta tags
-    document.head.querySelector('meta[property="og:title"]').content = title;
-    document.head.querySelector('meta[property="og:description"]').content = description;
-    document.head.querySelector('meta[property="og:image"]').content = image;
-  };
+useSeoMeta({
+  title: 'My Amazing Site',
+  ogTitle: 'My Amazing Site',
+  description: 'This is my amazing site, let me tell you all about it.',
+  ogDescription: 'This is my amazing site, let me tell you all about it.',
+  ogImage: 'https://dev2.talkinglands.com/public/store/organizations/01GPWQAET9ENJ489BQDCPNYYSB/projects/01GQF1WGY719VNNFHA9EJBJRJ9/photos/eRadzZqjPgYXQPhv7eBtQD.png',
+  twitterCard: 'summary_large_image',
+})
   </script>
   
-  <script>
-  export default {
-    head() {
-      return {
-        title: this.responseData.title,
-        meta: [
-          { hid: 'og:title', property: 'og:title', content: this.responseData.title },
-          { hid: 'og:description', property: 'og:description', content: this.responseData.description },
-          { hid: 'og:image', property: 'og:image', content: this.responseData.image },
-        ],
-      };
-    },
-  };
-  </script>
   
