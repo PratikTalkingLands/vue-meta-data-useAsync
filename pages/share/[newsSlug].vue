@@ -1,88 +1,64 @@
-<!-- <template>
-    <div style="height: 700px; width: 500px; display: flex; flex-direction: column;">
-        <img :src="posts.image" />
-        <h3>{{ posts.title }}</h3>
-        <p>{{ posts.description }}</p>
-        <button @click="showAlert">Show Alert</button>
-    </div>
-</template>
-
-<script setup>
-import { ref, onMounted, onBeforeMount } from 'vue'
-
-const { data: posts } = await useAsyncData(
-    'posts',
-    () => $fetch('https://api.npoint.io/6b9b6f798092807d5a8d', {
-
-    }), {
-}
-)
-
-const showAlert = () => {
-    alert(`This is a ${posts.title} post!`)
-}
-
-
-</script> -->
-
 <template>
-    <div style="height: 700px; width: 500px; display: flex; flex-direction: column;">
-        <img v-if="posts" :src="posts.image" />
-        <h3 v-if="posts">{{ posts.title }}</h3>
-        <p v-if="posts">{{ posts.description }}</p>
-        <button @click="showAlert" :disabled="!posts">Show Alert</button>
+    <div>
+      <h1>{{ responseData.title }}</h1>
+      <p>{{ responseData.description }}</p>
+      <img :src="responseData.image" alt="News Image" />
     </div>
-</template>
+  </template>
   
-<script setup>
-import { ref } from 'vue';
-//   import { useAsyncData } from '@vueuse/core';
-
-const posts = ref(null);
-
-// Immediately invoke the async function to fetch data
-useAsyncData('posts', async () => {
-    posts.value = await $fetch('https://api.npoint.io/6b9b6f798092807d5a8d');
-
-});
-
-const title = computed(() => {
-    return posts.value ? posts.value.title : "Default Title";
-});
-
-const ogTitle = computed(() => {
-    return posts.value ? posts.value.title : "Default OG Title";
-});
-
-const ogImage = computed(() => {
-    return posts.value ? posts.value.image : "default_image_url.jpg";
-});
-
-const ogDescription = computed(() => {
-    return posts.value ? posts.value.description : "Default OG Description";
-});
-
-
-const showAlert = () => {
-    if (posts.value) {
-        // alert(`This is a ${posts.value.title} post!`);
-        alert(JSON.stringify(posts.value))
+  <script setup>
+  import { ref, onMounted, onUpdated } from 'vue';
+  
+  // Define a reactive variable to store API response
+  const responseData = ref({});
+  
+  // Fetch data from the API
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://api.npoint.io/6b9b6f798092807d5a8d');
+      const data = await response.json();
+      responseData.value = data;
+  
+      // Update meta tags dynamically
+      updateMetaTags();
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-};
-
-watch(posts, () => {
-    useHead({
-        title: title.value,
+  };
+  
+  // Call the fetchData function when the component is mounted
+  onMounted(() => {
+    fetchData();
+  });
+  
+  // Call the fetchData function when the component is updated
+  onUpdated(() => {
+    updateMetaTags();
+  });
+  
+  // Function to update dynamic meta tags
+  const updateMetaTags = () => {
+    const { title, description, image } = responseData.value;
+  
+    // Update meta tags
+    document.head.querySelector('meta[property="og:title"]').content = title;
+    document.head.querySelector('meta[property="og:description"]').content = description;
+    document.head.querySelector('meta[property="og:image"]').content = image;
+  };
+  </script>
+  
+  <script>
+  export default {
+    head() {
+      return {
+        title: this.responseData.title,
         meta: [
-            { hid: 'og-title', property: 'og:title', content: ogTitle.value },
-            { hid: 'og-image', property: 'og:image', content: ogImage.value },
-            { hid: 'og-description', property: 'og:description', content: ogDescription.value }
-        ]
-    });
-});
-
-
-
-
-</script>
+          { hid: 'og:title', property: 'og:title', content: this.responseData.title },
+          { hid: 'og:description', property: 'og:description', content: this.responseData.description },
+          { hid: 'og:image', property: 'og:image', content: this.responseData.image },
+        ],
+      };
+    },
+  };
+  </script>
   
