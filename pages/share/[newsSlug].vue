@@ -1,11 +1,11 @@
 <template>
-    <!-- <Head>
+    <Head>
       <Title>{{ title }}</Title>
       <Meta name="description" content="title" />
-      <Meta name="og:title" :content="title" />
-      <Meta name="og:image" :content="title" />
-      <Meta name="og:description" :content="title" />
-    </Head> -->
+      <Meta name="og:title" content="Tlands OpenGraph" />
+      <Meta name="og:image" content="https://dev.talkinglands.in/public/store/organizations/01GPWQAET9ENJ489BQDCPNYYSB/projects/01GQF1WGY719VNNFHA9EJBJRJ9/photos/tBZjtDf8HacFfUcJEQaRwJ.png" />
+      <Meta name="og:description" content="Lorem Ipsum is here" />
+    </Head>
     <div style="height: 700px; width: 500px; display: flex; flex-direction: column;">
       <img v-if="posts" :src="posts.image" />
       <h3 v-if="posts">{{ posts.title }}</h3>
@@ -42,14 +42,14 @@
     }
   };
   
-useSeoMeta({
-  title: 'My Amazing Site',
-  ogTitle: 'My Amazing Site',
-  description: 'This is my amazing site, let me tell you all about it.',
-  ogDescription: 'This is my amazing site, let me tell you all about it.',
-  ogImage: 'https://dev2.talkinglands.com/public/store/organizations/01GPWQAET9ENJ489BQDCPNYYSB/projects/01GQF1WGY719VNNFHA9EJBJRJ9/photos/eRadzZqjPgYXQPhv7eBtQD.png',
-  twitterCard: 'summary_large_image',
-})
+// useSeoMeta({
+//   title: 'My Amazing Site',
+//   ogTitle: 'My Amazing Site',
+//   description: 'This is my amazing site, let me tell you all about it.',
+//   ogDescription: 'This is my amazing site, let me tell you all about it.',
+//   ogImage: 'https://dev2.talkinglands.com/public/store/organizations/01GPWQAET9ENJ489BQDCPNYYSB/projects/01GQF1WGY719VNNFHA9EJBJRJ9/photos/eRadzZqjPgYXQPhv7eBtQD.png',
+//   twitterCard: 'summary_large_image',
+// })
   </script>
   
   
