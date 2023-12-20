@@ -3,12 +3,11 @@
         <Title>Nuxt Dojo | {{ product.title }}</Title>
         <Meta name="description" :content="product.description" />
         <Meta name="og:title" :content="product.title" />
-        <Meta name="og:image"
-            :content="product.image" />
+        <Meta name="og:image" :content="product.image" />
         <Meta name="og:description" :content="product.description" />
         <Meta name="twitter:title" :content="product.title" />
-        <Meta name="twitter:image"
-            :content="product.image" />
+        <Meta name="twitter:image" :content="product.image" />
+        <Meta name="twitter:card" :content="product.image" />
         <Meta name="twitter:description" :content="product.description" />
     </Head>
     <div>
